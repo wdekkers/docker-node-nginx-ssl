@@ -6,12 +6,22 @@ nginx:
   volumes:
     - ./etc/nginx/nginx.conf:/etc/nginx/nginx.conf
     - ./sites:/etc/nginx/html
+    - ./etc/nginx:/etc/nginx
   links:
     - node
+  log_driver: "json-file"
+  log_opt:
+    max-size: "16k"
+    max-file: "2"
 
 node:
-  image: node
+  build: .
+  dockerfile: /etc/docker/DockerfileNode
   ports:
     - "3000:3000"
   volumes:
-    - ./sites:/usr/src/app
+    - ./sites:/src
+  log_driver: "json-file"
+  log_opt:
+    max-size: "16k"
+    max-file: "2"
